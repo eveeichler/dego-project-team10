@@ -15,7 +15,6 @@ app_007,,Emma Clark,emma.clark14@protonmail.com,191-40-8079,192.168.11.34,Female
 app_439,,Benjamin Jackson,benjamin.jackson34@gmail.com,807-60-7784,192.168.98.253,Male,1976-04-19,10019,87000.0,72,0.12,50675,True,,,4.2,61000.0,-,-,838.0,-,-,97.0,-,-,-,-,-,685.0,-,-,-
 app_307,,Joseph Lee,joseph.lee69@aol.com,178-35-6543,10.189.246.72,Male,1990-07-26,10097,53000.0,83,0.1,17420,True,,,6.1,57000.0,-,-,-,-,-,-,-,-,-,-,-,482.0,-,-,-
 app_064,,Paul Martin,paul.martin91@yahoo.com,500-65-1608,192.168.73.18,Male,1992-06-22,10009,81000.0,64,0.37,40674,False,algorithm_risk_score,,,,-,-,-,-,-,409.0,-,-,-,-,-,433.0,-,-,-
-app_101,,Sandra Smith,sandra.smith99@icloud.com,937-72-8731,172.30.237.98,Female,1997-03-23,90255,55000.0,0,0.3,15364,False,algorithm_risk_score,,,,-,-,-,-,464.0,-,-,527.0,-,-,-,-,-,-,-
 app_133,,Frank Harris,frank.harris11@outlook.com,507-24-3732,172.25.65.254,Male,1989-10-07,10022,70000.0,72,0.16,33883,False,algorithm_risk_score,,,,-,-,407.0,-,-,-,-,-,-,319.0,-,-,-,-,-
 app_214,,Christine Miller,christine.miller65@mail.com,929-57-7649,172.17.208.126,Female,1962-08-26,90277,116000.0,84,0.31,41962,True,,debt_consolidation,4.1,57000.0,-,-,-,-,-,-,-,-,-,-,-,-,-,-,786.0
 app_078,,Rebecca Wilson,rebecca.wilson4@gmail.com,854-84-6365,172.30.31.154,Female,1997-02-25,90299,47000.0,19,0.26,14054,False,insufficient_credit_history,,,,-,-,-,-,-,-,-,-,-,-,-,-,294.0,-,-
@@ -90,7 +89,6 @@ app_154,2024-01-15 00:00:00+00:00,Michelle Perez,michelle.perez39@protonmail.com
 app_166,2024-01-15 00:00:00+00:00,Amy Harris,amy.harris92@mail.com,262-99-5707,192.168.208.6,Female,1978-08-03,90247,118000.0,54,0.13,35023,False,algorithm_risk_score,,,,-,-,-,-,-,-,-,-,-,685.0,-,-,-,-,-
 app_100,,George Campbell,george.campbell53@outlook.com,438-48-3242,172.29.10.254,Male,1962-05-01,10001,79000.0,99,0.22,36346,True,,,2.8,19000.0,-,-,463.0,-,-,-,-,-,-,-,-,-,-,-,184.0
 app_107,,George Garcia,george.garcia38@outlook.com,565-34-4484,172.30.66.2,Male,1960-01-12,10087,91000.0,105,0.3,37143,False,algorithm_risk_score,,,,-,-,581.0,-,-,-,-,-,-,-,857.0,-,-,-,-
-app_088,,Susan Martinez,susan.martinez83@protonmail.com,780-24-9300,172.23.224.13,Female,1986-10-15,90229,55000.0,55,0.43,29118,False,algorithm_risk_score,,,,-,-,-,-,-,-,-,-,-,-,-,-,339.0,-,-
 app_114,,Shirley Thompson,shirley.thompson14@hotmail.com,841-69-3137,172.20.125.54,Female,1991-03-01,90204,75000.0,52,0.12,23554,True,,,3.9,50000.0,-,-,-,-,-,-,-,819.0,-,-,-,-,-,261.0,-
 app_421,,Donald Baker,donald.baker60@icloud.com,344-50-4287,192.168.147.249,Male,1982-07-17,10027,46000.0,44,0.06,5018,True,,,6.0,45000.0,-,-,861.0,-,-,-,-,-,-,-,-,-,-,-,563.0
 app_323,,Michael Thompson,michael.thompson45@gmail.com,862-33-2796,172.26.169.208,Male,1981-08-11,10090,113000.0,92,0.4,27746,True,,,3.9,80000.0,-,-,-,65.0,-,-,-,-,-,-,-,-,-,133.0,-
@@ -120,7 +118,6 @@ app_143,2024-01-15 00:00:00+00:00,David Wilson,david.wilson94@hotmail.com,855-76
 app_036,,Betty Hall,betty.hall38@hotmail.com,427-27-7779,10.141.198.139,Female,1988-03-31,90227,141000.0,18,0.4,77318,True,,,3.3,49000.0,-,-,723.0,-,-,-,-,-,-,-,-,-,-,-,-
 app_145,2024-01-15 00:00:00+00:00,Carolyn Robinson,carolyn.robinson18@outlook.com,887-80-6350,10.99.68.231,Female,1990-04-10,90297,85000.0,26,0.43,17930,False,algorithm_risk_score,,,,-,-,-,-,-,-,-,-,-,-,-,-,-,-,826.0
 app_128,,Thomas Scott,thomas.scott58@mail.com,857-88-7567,10.5.184.205,Male,1985-04-02,10078,94000.0,81,0.4,73842,False,high_dti_ratio,,,,-,-,-,-,-,199.0,-,-,-,-,-,-,-,-,-
-app_016,,Gary Wilson,gary.wilson85@yahoo.com,780-24-9300,192.168.20.42,Male,1959-12-11,10091,123000.0,71,0.37,86599,False,algorithm_risk_score,,,,-,-,-,-,-,-,-,485.0,-,-,-,-,-,-,-
 app_144,2024-01-15 00:00:00+00:00,Nicholas Taylor,nicholas.taylor14@icloud.com,745-28-4842,10.176.136.112,Male,1996-09-14,10024,56000.0,0,0.27,23970,True,,,6.2,39000.0,-,-,-,-,-,513.0,-,-,-,-,-,-,-,-,-
 app_134,,Brandon Moore,brandon.moore99@aol.com,714-64-1550,10.236.143.233,Male,1993-06-10,10048,98000.0,60,0.12,24889,True,,,6.0,69000.0,-,-,-,-,-,-,-,595.0,-,-,-,-,-,-,-
 app_238,,Andrew Carter,andrew.carter41@protonmail.com,760-94-9485,10.39.210.182,Male,1988-11-03,10057,131000.0,112,0.17,65612,False,algorithm_risk_score,business,,,-,-,720.0,-,708.0,666.0,-,-,-,-,-,-,-,-,-
@@ -344,7 +341,6 @@ app_018,,Patrick Martinez,patrick.martinez51@hotmail.com,935-32-9047,192.168.65.
 app_239,,Pamela Jackson,pamela.jackson33@gmail.com,501-16-9057,10.66.71.252,Female,1970-12-13,90260,58000.0,118,0.25,10333,False,algorithm_risk_score,moving,,,-,-,-,-,-,159.0,-,-,-,-,-,-,-,-,-
 app_053,,Richard Sanchez,richard.sanchez9@hotmail.com,309-94-6280,192.168.186.248,Male,1986-11-29,10041,101000.0,48,0.17,52330,True,,,5.8,74000.0,-,-,-,-,-,-,-,-,-,538.0,-,-,-,-,-
 app_341,,Cynthia Anderson,cynthia.anderson96@gmail.com,871-61-4185,172.22.214.211,Female,1991-05-13,10035,63000.0,50,0.21,15639,False,algorithm_risk_score,,,,-,-,-,-,-,363.0,-,-,-,-,-,-,-,-,-
-app_142,2024-01-15 00:00:00+00:00,Eric Lee,eric.lee8@outlook.com,813-95-8373,172.19.216.226,Male,2001-10-24,10050,72000.0,66,0.34,15207,True,,,3.0,17000.0,-,-,-,-,-,-,-,146.0,-,-,-,-,-,-,-
 app_035,,Ashley Ramirez,ashley.ramirez39@yahoo.com,300-69-5628,192.168.199.159,Female,1975-03-01,90233,81000.0,37,0.07,35656,True,,,5.3,40000.0,-,-,-,711.0,-,-,-,-,372.0,-,-,-,-,-,473.0
 app_406,,Thomas Jones,thomas.jones1@hotmail.com,496-11-4971,10.149.126.1,Male,1974-08-23,10099,106000.0,56,0.08,52422,True,,,5.4,18000.0,-,-,-,274.0,-,-,-,-,-,-,-,-,-,-,-
 app_327,,Karen Martinez,karen.martinez76@mail.com,338-35-5699,192.168.161.166,Female,1999-10-24,90261,40000.0,72,0.2,14626,False,algorithm_risk_score,,,,-,-,481.0,-,-,272.0,-,-,-,-,-,-,-,601.0,-
@@ -488,9 +484,7 @@ app_437,,Ashley Lopez,ashley.lopez68@icloud.com,637-73-3119,192.168.220.15,Femal
 app_305,,Mark Hernandez,mark.hernandez8@hotmail.com,460-68-4910,192.168.94.129,Male,1984-04-09,10084,100000.0,30,0.07,44145,True,,,5.6,49000.0,-,-,-,629.0,-,-,-,-,-,619.0,-,-,-,-,-
 app_266,,Betty Jones,betty.jones46@protonmail.com,155-87-5931,192.168.5.251,Female,1995-04-03,90202,46000.0,16,0.13,20079,False,insufficient_credit_history,,,,-,-,-,-,-,-,-,-,86.0,126.0,-,-,-,-,373.0
 app_324,,Donna Smith,donna.smith10@aol.com,610-14-8613,192.168.170.94,Female,1982-05-30,90250,96000.0,89,0.16,25814,False,algorithm_risk_score,,,,-,-,-,-,453.0,-,-,-,-,-,-,-,-,-,-
-app_049,,Donna Gonzalez,donna.gonzalez12@yahoo.com,845-50-3562,192.168.14.85,Female,2000-05-22,90278,59000.0,92,0.36,31881,False,algorithm_risk_score,,,,-,-,-,-,848.0,444.0,-,131.0,-,-,-,-,-,-,-
 app_468,,Patrick Martinez,patrick.martinez26@aol.com,996-86-6099,172.31.95.30,Male,1999-05-23,10046,22000.0,35,0.35,8982,False,insufficient_credit_history,,,,-,-,-,-,-,-,-,-,-,-,-,-,701.0,-,-
 app_192,2024-01-15 00:00:00+00:00,Dennis Lopez,dennis.lopez78@yahoo.com,936-44-8002,172.29.183.18,Male,1985-11-15,10088,78000.0,40,0.22,34292,True,,,6.0,18000.0,-,-,-,-,-,-,-,-,650.0,-,-,-,-,-,-
-app_234,,Samuel Hill,samuel.hill67@protonmail.com,937-72-8731,10.143.146.157,Male,1976-01-29,10090,96000.0,60,0.3,38703,False,algorithm_risk_score,education,,,-,-,-,-,-,-,-,-,-,526.0,-,-,-,-,-
 app_306,,Anna White,anna.white6@gmail.com,757-27-8131,10.26.176.56,Female,1978-07-26,90227,106000.0,80,0.29,63560,True,,,3.1,57000.0,-,-,-,-,-,-,-,-,-,490.0,-,-,-,-,-
 app_163,2024-01-15 00:00:00+00:00,Edward White,edward.white48@gmail.com,324-94-2806,172.26.137.15,Male,1981-03-06,10019,104000.0,58,0.3,38425,True,,,2.9,47000.0,-,-,-,-,-,-,-,-,-,-,-,404.0,-,-,-
