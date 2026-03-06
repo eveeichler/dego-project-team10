@@ -75,6 +75,9 @@ pip install pandas numpy scipy statsmodels scikit-learn matplotlib
 jupyter notebook notebooks/01-data-quality.ipynb
 jupyter notebook notebooks/02-data-analysis.ipynb
 jupyter notebook notebooks/03-privacy-governance.ipynb
+```
+
+> **Note:** Notebook 02 reads `clean_credit_applications.csv` from the `data/` directory — run Notebook 01 first to generate it.
 
 ---
 
