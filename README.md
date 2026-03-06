@@ -226,3 +226,16 @@ ZIP code is a near-perfect proxy for gender in this dataset. When gender is remo
 
 Credit history length is strongly correlated with age — younger applicants are structurally disadvantaged by this feature regardless of their actual creditworthiness.
 
+### Interaction Effects (Intersectionality)
+
+A logistic regression including an `age × gender` interaction term found the interaction to be non-significant (p = 0.802). Gender and age effects appear **independent** — there is no strong evidence of compounded intersectional bias in this dataset.
+
+### Main Conclusions
+
+- **Gender bias confirmed:** DI = 0.77, statistically significant, persists after financial controls.
+- **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is 25.2 pp below Millennials; Chi-Square p = 0.002.
+- **Proxy discrimination identified:** ZIP code proxies for gender; credit history proxies for age — both must be excluded from any model features.
+- **No intersectional compounding** detected between age and gender.
+
+---
+
