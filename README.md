@@ -164,10 +164,6 @@ Each remediation step follows explicit governance logic — our primary objectiv
 ---
 ```
 
-> **Note:** Notebook 02 reads `clean_credit_applications.csv` from the `data/` directory — run Notebook 01 first to generate it.
-
----
-
 ## Notebook 02 — Bias & Fairness Analysis
 
 **Role:** Data Scientist  
