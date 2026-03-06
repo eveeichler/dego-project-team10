@@ -239,3 +239,132 @@ A logistic regression including an `age × gender` interaction term found the in
 
 ---
 
+## Notebook 03 — Privacy & Governance Audit
+
+**Role:** Governance Officer  
+**Input:** `clean_credit_applications.csv` (485 records)
+
+### Part 1 — PII Identification & Classification
+
+Seven fields in the dataset carry personal data under GDPR Art. 4(1):
+
+| Field | Type | Sensitivity |
+| :--- | :--- | :--- |
+| `applicant_info.ssn` | Direct Identifier | **CRITICAL** |
+| `applicant_info.full_name` | Direct Identifier | HIGH |
+| `applicant_info.email` | Direct Identifier | HIGH |
+| `applicant_info.ip_address` | Direct Identifier | HIGH |
+| `applicant_info.date_of_birth` | Quasi-Identifier | MEDIUM |
+| `applicant_info.zip_code` | Quasi-Identifier + Proxy | MEDIUM |
+| `applicant_info.gender` | Quasi-Identifier + Protected | MEDIUM |
+
+**Re-identification test (Sweeney methodology):** Using ZIP code, gender, and date of birth in combination, every single applicant in the clean dataset is uniquely identifiable. **Re-identification rate = 100%.**  
+→ Quasi-identifier generalisation is mandatory before any analytical export.
+
+### Part 2 — Pseudonymisation Demonstration
+
+Three techniques are compared and applied:
+
+| Technique | Reversible? | Applied To |
+| :--- | :--- | :--- |
+| Plain SHA-256 | No | — (not used; deterministic = vulnerable to pre-computation) |
+| **Salted SHA-256** | No | SSN, email, IP address |
+| **Tokenization** | Yes (via lookup table) | Full name (`APPLICANT_001`, etc.) |
+
+The salted hash uses a randomly generated salt (`os.urandom(16)`) stored separately — making rainbow table attacks infeasible even when the input space (e.g., all valid SSN formats) is known.
+
+**k-Anonymity verification** after generalisation (age bands + ZIP prefix truncation):
+
+| Metric | Value |
+| :--- | :--- |
+| Minimum k | 1 |
+| Maximum k | 118 |
+| Average k | 23.1 |
+| Groups below k = 5 (at-risk) | 9 of 21 |
+
+Generalisation raised average k from 1 to 23.1, but 9 small demographic cohorts (mostly in ZIP prefix 300) remain below the internal governance threshold of k ≥ 5. Differential Privacy (Laplace mechanism for continuous variables, coin-flip technique for categorical) is required before any external release of these records.
+
+### Part 3 — Regulatory Compliance Mapping
+
+#### GDPR Violations
+
+| Finding | Article | Severity |
+| :--- | :--- | :--- |
+| Plaintext SSN, name, email, IP in analytical CSV | Art. 5(1)(f) — Integrity & Confidentiality / Art. 5(1)(c) — Data Minimisation | CRITICAL |
+| 440/502 records (88%) missing `processing_timestamp` — retention periods unenforceable | Art. 5(1)(e) — Storage Limitation | HIGH |
+| Gambling, Adult Entertainment spending collected without documented lawful basis | Art. 6, Art. 5(1)(b) — Purpose Limitation, Art. 5(1)(c) — Data Minimisation | HIGH |
+| 157 inconsistent date formats; shared SSNs; impossible values | Art. 5(1)(d) — Accuracy | MEDIUM |
+
+#### EU AI Act Classification
+
+Credit scoring is **explicitly enumerated** as High-Risk AI under EU AI Act Annex III, Point 5(b). This classification triggers mandatory obligations — all three are currently unmet:
+
+| Article | Obligation | Status |
+| :--- | :--- | :--- |
+| Art. 10 | Training data examined and corrected for bias | **NON-COMPLIANT** — Gender DI = 0.77; Gen Z approval gap = 25.2 pp |
+| Art. 13 | Automated decisions traceable to a specific model version | **NON-COMPLIANT** — No `model_version` field |
+| Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; most common rejection reason is `algorithm_risk_score` |
+
+#### Mandatory Governance Fields Audit
+
+All six fields required to demonstrate lawful processing under GDPR Art. 5(2) are **absent** from the dataset:
+
+| Field | Regulatory Basis | Status |
+| :--- | :--- | :--- |
+| `consent_timestamp` | GDPR Art. 6(1)(a), Art. 7 | MISSING |
+| `processing_purpose` | GDPR Art. 5(1)(b) | MISSING |
+| `retention_until` | GDPR Art. 5(1)(e) | MISSING |
+| `data_source` | GDPR Art. 14 | MISSING |
+| `human_review_flag` | GDPR Art. 22 | MISSING |
+| `model_version` | EU AI Act Art. 13 | MISSING |
+
+### Part 4 — Governance Controls
+
+**Control 1 — Privacy by Design Pipeline Restructuring** *(Immediate)*  
+Pseudonymisation needs to happen at ingestion — before data is written anywhere. The pipeline should produce two separately managed outputs: a secure PII store (compliance team only) and a clean analytical dataset (data science team). Plaintext identifiers should never make it through to the analytical layer.
+
+**Control 2 — Mandatory Governance Fields** *(Before next data collection cycle)*  
+The six fields identified above need to be added to the schema with ingestion-level validation. Any record missing a mandatory field should be quarantined before it enters the decision pipeline — their absence makes lawful processing impossible to demonstrate.
+
+**Control 3 — Bias Monitoring & Feature Governance** *(Before any retraining)*  
+ZIP code and credit history months need to come out of the model feature set entirely. Beyond that, a pre-deployment bias gate should block any model where DI drops below 0.80 for any protected attribute. A model card documenting training data, DI ratios, and excluded features should accompany every deployment.
+
+**Control 4 — Three-Tier Human Oversight** *(Before further production deployment)*  
+The current binary auto-reject setup needs to be replaced with a three-tier review architecture:
+- **Tier 1 (Green):** Automated approval for applications that clearly meet all thresholds
+- **Tier 2 (Yellow):** Mandatory human review when a proxy variable triggers or DI falls below 0.80 for the applicant's group
+- **Tier 3 (Red):** A clear pathway for applicants to contest an automated rejection — required under GDPR Art. 22
+
+---
+
+## Key Findings Summary
+
+| # | Finding | Regulatory Impact |
+| :--- | :--- | :--- |
+| 1 | All 4 direct identifiers in plaintext in a public repository | GDPR Art. 5(1)(f) — **CRITICAL** |
+| 2 | Sensitive lifestyle spending data collected without documented lawful basis | GDPR Art. 5(1)(b)(c) — HIGH |
+| 3 | 88% of records missing `processing_timestamp` | GDPR Art. 5(1)(e) — HIGH |
+| 4 | Gender DI ratio = 0.77; Gen Z approval rate 25.2 pp below Millennials | EU AI Act Art. 10 — **CRITICAL** |
+| 5 | ZIP code is a structural proxy for gender; credit history proxies for age | EU AI Act Art. 10 — HIGH |
+| 6 | No human oversight mechanism; fully automated rejections in operation | GDPR Art. 22 / EU AI Act Art. 14 — HIGH |
+| 7 | All 6 mandatory governance fields absent | GDPR Art. 5(2) / EU AI Act Art. 13 — **CRITICAL** |
+| 8 | Shared SSNs, malformed emails, impossible values in raw pipeline | GDPR Art. 5(1)(d) — MEDIUM |
+
+---
+
+## Regulatory Exposure
+
+| Regulation | Provision | Maximum Fine |
+| :--- | :--- | :--- |
+| GDPR | Art. 83(5) — violations of Arts. 5, 25 | €20M or 4% of global annual turnover |
+| EU AI Act | Art. 99(4) — High-Risk system non-compliance | €15M or 3% of global annual turnover |
+
+**Immediate actions required (in priority order):**
+1. Remove plaintext CSV from Git repository history
+2. Implement pseudonymisation at pipeline ingestion
+3. Drop `spending_Adult Entertainment`, `spending_Gambling`, `spending_Alcohol` fields
+4. Exclude ZIP code and credit history from all model features
+5. Add 6 mandatory governance fields with ingestion-level validation
+6. Implement Three-Tier Human Oversight before any further production deployment
+
+
