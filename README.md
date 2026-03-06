@@ -30,6 +30,20 @@ NovaCred's credit scoring system is classified as **High-Risk AI** under EU AI A
 
 ---
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Repository Structure](#repository-structure)
+3. [Team & Roles](#team--roles)
+4. [How to Run](#how-to-run)
+5. [Notebook 01 — Data Quality](#notebook-01--data-quality)
+6. [Notebook 02 — Bias & Fairness Analysis](#notebook-02--bias--fairness-analysis)
+7. [Notebook 03 — Privacy & Governance Audit](#notebook-03--privacy--governance-audit)
+8. [Key Findings Summary](#key-findings-summary)
+9. [Regulatory Exposure](#regulatory-exposure)
+
+---
+
 ## Repository Structure
 
 ```
