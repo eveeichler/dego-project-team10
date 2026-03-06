@@ -46,5 +46,37 @@ dego-project-team10/
 │
 └── README.md
 ```
+---
+
+## Team & Roles
+
+| Role | Responsibilities |
+| :--- | :--- |
+| **Data Engineer**: Guilherme Morgado | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
+| **Data Scientist**: João Serrano | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
+| **Governance Officer**: Eve Eichler| PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
+| **Product Lead**: Chiara Nathani | Presentation, cross-notebook synthesis, repository coordination |
+
+---
+
+## How to Run
+
+**Requirements:** Python 3.9+, Jupyter Notebook
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/eveeichler/dego-project-team10.git
+cd dego-project-team10
+
+# 2. Install dependencies
+pip install pandas numpy scipy statsmodels scikit-learn matplotlib
+
+# 3. Run notebooks in order (each builds on the previous output)
+jupyter notebook notebooks/01-data-quality.ipynb
+jupyter notebook notebooks/02-data-analysis.ipynb
+jupyter notebook notebooks/03-privacy-governance.ipynb
+```
+
+> **Note:** Notebook 02 reads `clean_credit_applications.csv` from the `data/` directory — run Notebook 01 first to generate it.
 
 ---
