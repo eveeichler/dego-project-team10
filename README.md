@@ -162,7 +162,6 @@ Each remediation step follows explicit governance logic — our primary objectiv
 | Shared SSNs across distinct applicants | Accuracy |
 
 ---
-```
 
 ## Notebook 02 — Bias & Fairness Analysis
 
