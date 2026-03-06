@@ -10,11 +10,8 @@ Guilherme Morgado (56857)
 # DEGO 2606 — Credit Application Governance Analysis
 ### Team 10 · Nova SBE MSc Business Analytics
 
-> **Course:** Data Ethics & Governance Operations (DEGO 2606)  
 > **Dataset:** NovaCred synthetic credit application pipeline — 502 raw records  
 > **Regulatory Scope:** GDPR (EU) 2016/679 · EU AI Act (EU) 2024/1689
-
-
 
 ## Project Overview
 
