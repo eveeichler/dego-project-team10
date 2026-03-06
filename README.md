@@ -167,3 +167,67 @@ Each remediation step follows explicit governance logic — our primary objectiv
 > **Note:** Notebook 02 reads `clean_credit_applications.csv` from the `data/` directory — run Notebook 01 first to generate it.
 
 ---
+
+## Notebook 02 — Bias & Fairness Analysis
+
+**Role:** Data Scientist  
+**Input:** `clean_credit_applications.csv` (485 records)
+
+### Gender Disparate Impact
+
+**Approval rates:**
+- Male: **65.9%** (out of 248 male applicants)
+- Female: **50.6%** (out of 241 female applicants)
+- Difference: **15.3 percentage points**
+
+**Disparate Impact Ratio** (Female / Male):
+
+$$DI = \frac{0.506}{0.659} = \mathbf{0.77}$$
+
+DI < 0.80 — adverse impact is presumed under the EEOC four-fifths rule.
+
+**Proportions Z-test:** p = 0.0007 (two-sided) → the gender approval gap is **statistically significant** at the 5% level.
+
+**Logistic regression (controlling for financial variables):** `gender_Male` remains a significant predictor of approval (coef = 0.624, p = 0.043), confirming the disparity persists even after controlling for income, credit history, debt-to-income ratio, and savings balance.
+
+### Age-Based Disparity
+
+**Approval by age group:**
+
+| Age Group | Approved | Denied | Approval Rate |
+| :--- | :--- | :--- | :--- |
+| Gen Z (18–25) | 13 | 27 | **32.5%** |
+| Millennials (26–40) | 139 | 102 | **57.7%** |
+| Gen X (41–60) | 115 | 64 | **64.2%** |
+| Seniors (60+) | 20 | 9 | **69.0%** |
+
+**Chi-Square test:** p = 0.0019 → age group and approval outcome are **not independent** (significant at 5% level).
+
+**Logistic regression (age as continuous variable):** The odds ratio for age was 1.025 (p = 0.005) — small on its own, but it compounds over time. Over 30 years that adds up to an odds ratio of 2.09, which is a significant structural disadvantage for younger applicants.
+
+**Linear trend:** The trendline across approval rates by age has a clear upward slope — older applicants are consistently more likely to be approved.
+
+### Proxy Variable Screening
+
+Removing protected attributes from a model does not automatically remove the bias — other features can reproduce the same discriminatory outcomes if they are correlated with gender or age. We screened the financial and geographic features to check for this.
+
+**Proxy for Gender:**
+
+| Variable | Correlation with Gender |
+| :--- | :--- |
+| ZIP code (binary: NYC prefix 100 vs. other) | **r = 0.783** |
+| Annual income | r = -0.050 |
+| Credit history months | r = -0.024 |
+
+ZIP code is a near-perfect proxy for gender in this dataset. When gender is removed from logistic regression, ZIP code becomes strongly significant (coef = 0.585, p = 0.002) — confirming it absorbs the gender signal.
+
+**Proxy for Age:**
+
+| Variable | Correlation with Age |
+| :--- | :--- |
+| Credit history months | **r = 0.659** |
+| Annual income | r = 0.386 |
+| Savings balance | r = 0.272 |
+
+Credit history length is strongly correlated with age — younger applicants are structurally disadvantaged by this feature regardless of their actual creditworthiness.
+
