@@ -1,14 +1,12 @@
 # dego-project-team10
 DEGO Course Project — Team 10
 
-Team Members:
+>**Team Members**:
 Eve-Fabiene Eichler (71784)
 João Serrano (74929)
 Chiara Nathani (71303)
 Guilherme Morgado (56857)
 
-# Credit Application Governance Analysis
-### Team 10
 > **Dataset:** NovaCred synthetic credit application pipeline — 502 raw records  
 
 ---
