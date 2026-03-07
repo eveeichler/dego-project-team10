@@ -67,10 +67,10 @@ dego-project-team10/
 
 | Role | Responsibilities |
 | :--- | :--- |
-| **Data Engineer** | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
-| **Data Scientist** | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
-| **Governance Officer** | PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
-| **Product Lead** | Presentation, cross-notebook synthesis, repository coordination |
+| **Data Engineer**: Guilherme Morgado | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
+| **Data Scientist**: João Serrano | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
+| **Governance Officer**: Eve Eichler | PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
+| **Product Lead**: Chiara Nathani | Presentation, cross-notebook synthesis, repository coordination |
 
 ---
 
