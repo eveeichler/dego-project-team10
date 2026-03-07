@@ -9,10 +9,7 @@ Guilherme Morgado (56857)
 
 # Credit Application Governance Analysis
 ### Team 10
-
-> **Course:**   
 > **Dataset:** NovaCred synthetic credit application pipeline — 502 raw records  
-> **Regulatory Scope:** GDPR (EU) 2016/679 · EU AI Act (EU) 2024/1689
 
 ---
 
