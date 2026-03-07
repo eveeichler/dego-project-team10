@@ -7,23 +7,12 @@ João Serrano (74929)
 Chiara Nathani (71303)
 Guilherme Morgado (56857)
 
-# DEGO 2606 — Credit Application Governance Analysis
-### Team 10 · Nova SBE MSc Business Analytics
+# Credit Application Governance Analysis
+### Team 10
 
+> **Course:**   
 > **Dataset:** NovaCred synthetic credit application pipeline — 502 raw records  
 > **Regulatory Scope:** GDPR (EU) 2016/679 · EU AI Act (EU) 2024/1689
-
-## Project Overview
-
-This project conducts an end-to-end governance audit of the credit scoring system **NovaCred**. 
-
-The goal is to tackle data quality, bias, and privacy violations in the credit application pipeline. We start from a raw JSON dataset and work through it in 3 stages:
-
-1. **Data Engineering** — identify, quantify, and remediate all data quality issues using documented governance rationale
-2. **Bias Detection** — apply fairness metrics (Disparate Impact ratio, Chi-Square, logistic regression) to detect gender and age-based discrimination
-3. **Privacy & Compliance Audit** — map pipeline gaps to specific GDPR and EU AI Act obligations, demonstrate pseudonymisation techniques, and issue governance controls
-
-NovaCred's credit scoring system is classified as **High-Risk AI** under EU AI Act Annex III, Point 5(b). The pipeline is currently **non-compliant with both GDPR and the EU AI Act**.
 
 ---
 
@@ -38,6 +27,20 @@ NovaCred's credit scoring system is classified as **High-Risk AI** under EU AI A
 7. [Notebook 03 — Privacy & Governance Audit](#notebook-03--privacy--governance-audit)
 8. [Key Findings Summary](#key-findings-summary)
 9. [Regulatory Exposure](#regulatory-exposure)
+
+---
+
+## Project Overview
+
+This project audits a synthetic credit application dataset from **NovaCred**, a fictional fintech whose ML-driven loan approval pipeline was flagged for regulatory review. The analysis covers three interconnected dimensions: data quality, algorithmic bias, and regulatory compliance.
+
+The work is structured across three notebooks, each building on the preceding output:
+
+1. **Data Engineering** — systematic detection and remediation of quality issues in the raw JSON dataset, with a documented governance rationale for each intervention
+2. **Bias Detection** — statistical examination of whether gender and age substantively affect loan approval outcomes, including proxy variable screening to identify indirect discrimination
+3. **Privacy & Compliance Audit** — mapping of identified issues to specific GDPR articles and EU AI Act obligations, pseudonymisation demonstration, and four concrete governance controls
+
+The central finding: NovaCred's credit scoring system meets the definition of **High-Risk AI** under EU AI Act Annex III, Point 5(b), and is non-compliant with both GDPR and the EU AI Act across multiple provisions — including biased approval outcomes, absent audit trails, and plaintext personal data present in an analytical CSV.
 
 ---
 
@@ -57,16 +60,17 @@ dego-project-team10/
 │
 └── README.md
 ```
+
 ---
 
 ## Team & Roles
 
 | Role | Responsibilities |
 | :--- | :--- |
-| **Data Engineer**: Guilherme Morgado | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
-| **Data Scientist**: João Serrano | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
-| **Governance Officer**: Eve Eichler| PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
-| **Product Lead**: Chiara Nathani | Presentation, cross-notebook synthesis, repository coordination |
+| **Data Engineer** | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
+| **Data Scientist** | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
+| **Governance Officer** | PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
+| **Product Lead** | Presentation, cross-notebook synthesis, repository coordination |
 
 ---
 
@@ -100,13 +104,13 @@ jupyter notebook notebooks/03-privacy-governance.ipynb
 
 ### Data Loading & Handling
 
-The raw dataset consists of deeply nested JSON objects. We used `pd.json_normalize()` to flatten the standard fields, then separately exploded and pivoted the `spending_behavior` array (a list of `{category, amount}` dicts) into one-hot-style spending columns. This yielded a flat dataframe with 35 columns.
+The raw dataset was provided as deeply nested JSON, precluding direct CSV ingestion. `pd.json_normalize()` was applied to flatten standard fields, while the `spending_behavior` column — structured as an array of `{category, amount}` objects per applicant — required a separate pipeline: the array was exploded into individual rows, normalised, then pivoted to restore a single-row-per-applicant structure with one column per spending category. Final schema: 35 columns.
 
 ### Issues Detected
 
 | # | Issue | Dimension | Count |
 | :--- | :--- | :--- | :--- |
-| 1 | Duplicate application records | Consistency | 2 exact duplicates (apps `app_042`, `app_001`) |
+| 1 | Duplicate application records | Consistency | 2 exact duplicates (`app_042`, `app_001`) |
 | 2 | Annual income stored as string | Validity | 8 records |
 | 3 | Missing fields | Completeness | See breakdown below |
 | 4 | Inconsistent gender coding (`M`/`Male`, `F`/`Female`) | Consistency | 111 records affected |
@@ -132,26 +136,26 @@ The raw dataset consists of deeply nested JSON objects. We used `pd.json_normali
 
 ### Remediation Rationale
 
-Each remediation step follows explicit governance logic — our primary objective is a demographic bias audit, so data preservation and compliance are balanced:
+Given that the primary objective is a bias audit, data preservation was treated as a first-order concern — unnecessary record removal reduces statistical power for the fairness analysis. Each remediation applied the minimum intervention sufficient to resolve the specific issue, with an explicit governance rationale:
 
 | Issue | Treatment | Rationale |
 | :--- | :--- | :--- |
 | Duplicate `_id` records | Drop duplicates, keep first | Prevents double-counting in statistical tests |
 | Income stored as string | `pd.to_numeric(errors='coerce')` | Restore numeric type; merge with `annual_salary` field where missing |
 | Gender inconsistency | Map `M → Male`, `F → Female` | Standardise categories for groupby and fairness calculations |
-| Negative credit history | `abs()` | Logically impossible value treated as a data entry sign typo |
-| Negative savings balance | `.clip(lower=0)` | A savings account cannot hold a negative balance; floor to zero |
-| Future timestamps | Set to `NaT` | Invalid timestamps isolated; demographic data preserved |
-| Shared SSNs | Drop **all** copies | Identity fraud / pipeline corruption risk; keeping any instance is a compliance liability |
-| Malformed emails | Drop records | Non-verifiable contact data treated as low-quality / potentially fraudulent |
-| Missing gender or DOB | Drop records | Without protected attributes, records are un-auditable for bias analysis |
-| Inconsistent date formats | `pd.to_datetime(format='mixed')` | Pandas `mixed` mode resolves both `-` and `/` separators |
+| Negative credit history | `abs()` | Most likely a sign typo — the magnitude is still valid |
+| Negative savings balance | `.clip(lower=0)` | A savings balance cannot be negative; floored to zero while preserving the remainder of the record |
+| Future timestamps | Set to `NaT` | The timestamp is wrong but the applicant's financial profile is fine |
+| Shared SSNs | Drop **all** copies | Can't know which record is real — keeping any of them is a compliance risk |
+| Malformed emails | Drop records | Can't verify or legally contact this person |
+| Missing gender or DOB | Drop records | Without protected attributes the record is un-auditable for bias analysis |
+| Inconsistent date formats | `pd.to_datetime(format='mixed')` | Pandas `mixed` mode handles both `-` and `/` separators in one pass |
 
 **Final clean dataset: 485 records, 33 columns.**
 
 ### Data Quality Dimension Mapping
 
-| Issue | GDPR Dimension |
+| Issue | Data Quality Dimension |
 | :--- | :--- |
 | Missing fields | Completeness |
 | Duplicate records, gender coding inconsistency, mixed date formats | Consistency |
@@ -168,71 +172,63 @@ Each remediation step follows explicit governance logic — our primary objectiv
 ### Gender Disparate Impact
 
 **Approval rates:**
-- Male: **65.9%** (out of 248 male applicants)
-- Female: **50.6%** (out of 241 female applicants)
-- Difference: **15.3 percentage points**
+- Male: **66.8%** (out of 241 applicants, 161 approved)
+- Female: **50.8%** (out of 244 applicants, 124 approved)
+- Gap: **16.0 percentage points**
 
-**Disparate Impact Ratio** (Female / Male):
+The key metric here is the **Disparate Impact ratio**, which compares the approval rate of the disadvantaged group against the privileged one:
 
-$$DI = \frac{0.506}{0.659} = \mathbf{0.77}$$
+> DI = Female approval rate / Male approval rate = 0.508 / 0.668 = **0.76**
 
-DI < 0.80 — adverse impact is presumed under the EEOC four-fifths rule.
+Under the EEOC four-fifths rule, a DI below 0.80 constitutes evidence of adverse impact. At 0.76, NovaCred's system fails this threshold by a meaningful margin.
 
-**Proportions Z-test:** p = 0.0007 (two-sided) → the gender approval gap is **statistically significant** at the 5% level.
-
-**Logistic regression (controlling for financial variables):** `gender_Male` remains a significant predictor of approval (coef = 0.624, p = 0.043), confirming the disparity persists even after controlling for income, credit history, debt-to-income ratio, and savings balance.
+Statistical validation proceeded in two stages. A proportions Z-test (p = 0.000349) confirmed the disparity is not attributable to sampling variation. A logistic regression controlling for annual income, credit history, debt-to-income ratio, and savings balance further confirmed that the gender coefficient remains substantial (coef = 0.697) — the approval gap is not explained by differential financial profiles. Gender independently increases the log-odds of approval.
 
 ### Age-Based Disparity
-
-**Approval by age group:**
 
 | Age Group | Approved | Denied | Approval Rate |
 | :--- | :--- | :--- | :--- |
 | Gen Z (18–25) | 13 | 27 | **32.5%** |
-| Millennials (26–40) | 139 | 102 | **57.7%** |
-| Gen X (41–60) | 115 | 64 | **64.2%** |
+| Millennials (26–40) | 138 | 102 | **57.5%** |
+| Gen X (41–60) | 114 | 62 | **64.8%** |
 | Seniors (60+) | 20 | 9 | **69.0%** |
 
-**Chi-Square test:** p = 0.0019 → age group and approval outcome are **not independent** (significant at 5% level).
+The ~25 percentage point gap between Gen Z and all other cohorts represents the most pronounced disparity in the dataset. A Chi-Square test confirmed that age group and approval outcome are statistically dependent (p = 0.0015). Logistic regression on continuous age yields a coefficient of 0.025 (OR = 1.026 per year), compounding to approximately **2.1× higher approval odds over a 30-year span** (OR = 2.13).
 
-**Logistic regression (age as continuous variable):** The odds ratio for age was 1.025 (p = 0.005) — small on its own, but it compounds over time. Over 30 years that adds up to an odds ratio of 2.09, which is a significant structural disadvantage for younger applicants.
+### Proxy Variables
 
-**Linear trend:** The trendline across approval rates by age has a clear upward slope — older applicants are consistently more likely to be approved.
-
-### Proxy Variable Screening
-
-Removing protected attributes from a model does not automatically remove the bias — other features can reproduce the same discriminatory outcomes if they are correlated with gender or age. We screened the financial and geographic features to check for this.
+Eliminating protected attributes from a model's feature set does not eliminate bias if correlated variables remain available to reproduce the same discrimination indirectly. All financial and geographic features were screened for proxy potential:
 
 **Proxy for Gender:**
 
 | Variable | Correlation with Gender |
 | :--- | :--- |
-| ZIP code (binary: NYC prefix 100 vs. other) | **r = 0.783** |
-| Annual income | r = -0.050 |
-| Credit history months | r = -0.024 |
+| ZIP code (binary: NYC prefix 100 vs. other) | **r = 0.786** |
+| Debt-to-income ratio | r = 0.023 |
+| Annual income | r = −0.050 |
 
-ZIP code is a near-perfect proxy for gender in this dataset. When gender is removed from logistic regression, ZIP code becomes strongly significant (coef = 0.585, p = 0.002) — confirming it absorbs the gender signal.
+ZIP code functions as a near-perfect proxy for gender in this dataset (r = 0.786). When gender is excluded from the logistic regression, ZIP code absorbs the signal and becomes the dominant predictor — demonstrating that feature removal alone is an insufficient remediation strategy.
 
 **Proxy for Age:**
 
 | Variable | Correlation with Age |
 | :--- | :--- |
-| Credit history months | **r = 0.659** |
-| Annual income | r = 0.386 |
-| Savings balance | r = 0.272 |
+| Credit history months | **r = 0.657** |
+| Annual income | r = 0.389 |
+| Savings balance | r = 0.276 |
 
-Credit history length is strongly correlated with age — younger applicants are structurally disadvantaged by this feature regardless of their actual creditworthiness.
+Credit history length is structurally correlated with age as a function of elapsed time rather than financial behaviour. A younger applicant with 12 months of credit history is not inherently less creditworthy than an older applicant with 15 years — the difference reflects opportunity, not risk profile.
 
 ### Interaction Effects (Intersectionality)
 
-A logistic regression including an `age × gender` interaction term found the interaction to be non-significant (p = 0.802). Gender and age effects appear **independent** — there is no strong evidence of compounded intersectional bias in this dataset.
+We also tested whether being young and female compounds the disadvantage beyond either effect alone. The `age × gender` interaction term was non-significant (p = 0.802), so the two biases appear to operate independently in this dataset.
 
 ### Main Conclusions
 
-- **Gender bias confirmed:** DI = 0.77, statistically significant, persists after financial controls.
-- **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is 25.2 pp below Millennials; Chi-Square p = 0.002.
-- **Proxy discrimination identified:** ZIP code proxies for gender; credit history proxies for age — both must be excluded from any model features.
-- **No intersectional compounding** detected between age and gender.
+- **Gender bias confirmed:** DI = 0.76, statistically significant (p = 0.000349), persists after controlling for all financial variables.
+- **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is ~25 pp below every other cohort; Chi-Square p = 0.0015.
+- **Proxy discrimination identified:** ZIP code proxies for gender (r = 0.786); credit history proxies for age (r = 0.657) — both must be excluded from any model feature set.
+- **No intersectional compounding** detected between age and gender effects.
 
 ---
 
@@ -243,7 +239,7 @@ A logistic regression including an `age × gender` interaction term found the in
 
 ### Part 1 — PII Identification & Classification
 
-Seven fields in the dataset carry personal data under GDPR Art. 4(1):
+Under GDPR Art. 4(1), personal data is anything that can be used to identify a real person — directly or indirectly. We split the dataset's fields into two tiers:
 
 | Field | Type | Sensitivity |
 | :--- | :--- | :--- |
@@ -255,31 +251,29 @@ Seven fields in the dataset carry personal data under GDPR Art. 4(1):
 | `applicant_info.zip_code` | Quasi-Identifier + Proxy | MEDIUM |
 | `applicant_info.gender` | Quasi-Identifier + Protected | MEDIUM |
 
-**Re-identification test (Sweeney methodology):** Using ZIP code, gender, and date of birth in combination, every single applicant in the clean dataset is uniquely identifiable. **Re-identification rate = 100%.**  
-→ Quasi-identifier generalisation is mandatory before any analytical export.
+A re-identification test was conducted following the Sweeney (2000) methodology, combining ZIP code, gender, and date of birth as quasi-identifiers. **479 of 485 records (98.8%) are uniquely identifiable** using only those three fields, without recourse to SSN or full name. This rate exceeds Sweeney's 87% benchmark for the general US population and establishes that the dataset does not meet anonymisation standards — full GDPR obligations apply.
 
 ### Part 2 — Pseudonymisation Demonstration
 
-Three techniques are compared and applied:
-
 | Technique | Reversible? | Applied To |
 | :--- | :--- | :--- |
-| Plain SHA-256 | No | — (not used; deterministic = vulnerable to pre-computation) |
+| Plain SHA-256 | No | Not used — deterministic, vulnerable to pre-computation attacks |
 | **Salted SHA-256** | No | SSN, email, IP address |
 | **Tokenization** | Yes (via lookup table) | Full name (`APPLICANT_001`, etc.) |
 
-The salted hash uses a randomly generated salt (`os.urandom(16)`) stored separately — making rainbow table attacks infeasible even when the input space (e.g., all valid SSN formats) is known.
+The salt is generated using `os.urandom(16)` and stored separately — this breaks the deterministic link between input and hash, making rainbow table attacks infeasible. Tokenization was chosen for names specifically because a compliance officer may need to recover the original value to respond to a GDPR Art. 17 erasure request.
 
-**k-Anonymity verification** after generalisation (age bands + ZIP prefix truncation):
+**k-Anonymity after generalising DOB to age bands and truncating ZIP to 3-digit prefix:**
 
 | Metric | Value |
 | :--- | :--- |
+| Total k-groups | 31 |
 | Minimum k | 1 |
-| Maximum k | 118 |
-| Average k | 23.1 |
-| Groups below k = 5 (at-risk) | 9 of 21 |
+| Maximum k | 75 |
+| Average k | 15.6 |
+| Groups below k = 5 (at-risk) | 18 of 31 |
 
-Generalisation raised average k from 1 to 23.1, but 9 small demographic cohorts (mostly in ZIP prefix 300) remain below the internal governance threshold of k ≥ 5. Differential Privacy (Laplace mechanism for continuous variables, coin-flip technique for categorical) is required before any external release of these records.
+Average k improved significantly after generalisation, but 18 of 31 cohorts still fall below k ≥ 5 — particularly in lower-density ZIP prefixes. Those groups would need **Differential Privacy** (Laplace mechanism) before the data could safely be shared externally.
 
 ### Part 3 — Regulatory Compliance Mapping
 
@@ -288,23 +282,23 @@ Generalisation raised average k from 1 to 23.1, but 9 small demographic cohorts 
 | Finding | Article | Severity |
 | :--- | :--- | :--- |
 | Plaintext SSN, name, email, IP in analytical CSV | Art. 5(1)(f) — Integrity & Confidentiality / Art. 5(1)(c) — Data Minimisation | CRITICAL |
-| 440/502 records (88%) missing `processing_timestamp` — retention periods unenforceable | Art. 5(1)(e) — Storage Limitation | HIGH |
-| Gambling, Adult Entertainment spending collected without documented lawful basis | Art. 6, Art. 5(1)(b) — Purpose Limitation, Art. 5(1)(c) — Data Minimisation | HIGH |
+| 440/502 records (88%) missing `processing_timestamp` | Art. 5(1)(e) — Storage Limitation | HIGH |
+| Gambling & Adult Entertainment spending collected without documented lawful basis | Art. 6, Art. 5(1)(b) — Purpose Limitation | HIGH |
 | 157 inconsistent date formats; shared SSNs; impossible values | Art. 5(1)(d) — Accuracy | MEDIUM |
 
 #### EU AI Act Classification
 
-Credit scoring is **explicitly enumerated** as High-Risk AI under EU AI Act Annex III, Point 5(b). This classification triggers mandatory obligations — all three are currently unmet:
+Credit scoring is explicitly listed as High-Risk AI under EU AI Act **Annex III, Point 5(b)** — this applies automatically, not by judgment call. All three mandatory obligations are currently unmet:
 
 | Article | Obligation | Status |
 | :--- | :--- | :--- |
-| Art. 10 | Training data examined and corrected for bias | **NON-COMPLIANT** — Gender DI = 0.77; Gen Z approval gap = 25.2 pp |
-| Art. 13 | Automated decisions traceable to a specific model version | **NON-COMPLIANT** — No `model_version` field |
-| Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; most common rejection reason is `algorithm_risk_score` |
+| Art. 10 | Training data examined and corrected for bias | **NON-COMPLIANT** — Gender DI = 0.76; Gen Z gap ≈ 25 pp |
+| Art. 13 | Automated decisions traceable to a specific model version | **NON-COMPLIANT** — No `model_version` field anywhere |
+| Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; 161 rejections driven by `algorithm_risk_score` alone |
 
 #### Mandatory Governance Fields Audit
 
-All six fields required to demonstrate lawful processing under GDPR Art. 5(2) are **absent** from the dataset:
+GDPR Art. 5(2) — the Accountability Principle — means it's not enough to be compliant, you have to be able to prove it. All six fields that would allow NovaCred to do that are absent:
 
 | Field | Regulatory Basis | Status |
 | :--- | :--- | :--- |
@@ -318,19 +312,19 @@ All six fields required to demonstrate lawful processing under GDPR Art. 5(2) ar
 ### Part 4 — Governance Controls
 
 **Control 1 — Privacy by Design Pipeline Restructuring** *(Immediate)*  
-Pseudonymisation needs to happen at ingestion — before data is written anywhere. The pipeline should produce two separately managed outputs: a secure PII store (compliance team only) and a clean analytical dataset (data science team). Plaintext identifiers should never make it through to the analytical layer.
+Pseudonymisation needs to happen at ingestion — before data is written anywhere. Split the pipeline output into a secure PII store (compliance team only) and a clean analytical dataset (data science team). No plaintext identifiers should ever reach the analytical layer.
 
 **Control 2 — Mandatory Governance Fields** *(Before next data collection cycle)*  
-The six fields identified above need to be added to the schema with ingestion-level validation. Any record missing a mandatory field should be quarantined before it enters the decision pipeline — their absence makes lawful processing impossible to demonstrate.
+Add the six fields above to the data schema with ingestion-level validation. Any record missing a mandatory field should be quarantined before it enters the decision pipeline.
 
 **Control 3 — Bias Monitoring & Feature Governance** *(Before any retraining)*  
-ZIP code and credit history months need to come out of the model feature set entirely. Beyond that, a pre-deployment bias gate should block any model where DI drops below 0.80 for any protected attribute. A model card documenting training data, DI ratios, and excluded features should accompany every deployment.
+Remove ZIP code and credit history months from the model feature set entirely. Before every deployment, compute DI ratios on a holdout set — if DI drops below 0.80 for any protected attribute, block deployment until resolved.
 
 **Control 4 — Three-Tier Human Oversight** *(Before further production deployment)*  
-The current binary auto-reject setup needs to be replaced with a three-tier review architecture:
-- **Tier 1 (Green):** Automated approval for applications that clearly meet all thresholds
-- **Tier 2 (Yellow):** Mandatory human review when a proxy variable triggers or DI falls below 0.80 for the applicant's group
-- **Tier 3 (Red):** A clear pathway for applicants to contest an automated rejection — required under GDPR Art. 22
+Replace the current binary auto-reject setup with a three-tier architecture:
+- **Tier 1 (Green):** Automated approval for clearly compliant applications
+- **Tier 2 (Yellow):** Mandatory human review when a proxy variable triggers or DI falls below 0.80
+- **Tier 3 (Red):** Full manual review pathway for contested rejections — required under GDPR Art. 22
 
 ---
 
@@ -338,14 +332,14 @@ The current binary auto-reject setup needs to be replaced with a three-tier revi
 
 | # | Finding | Regulatory Impact |
 | :--- | :--- | :--- |
-| 1 | All 4 direct identifiers in plaintext in a public repository | GDPR Art. 5(1)(f) — **CRITICAL** |
+| 1 | All 4 direct identifiers in plaintext in analytical CSV | GDPR Art. 5(1)(f) — **CRITICAL** |
 | 2 | Sensitive lifestyle spending data collected without documented lawful basis | GDPR Art. 5(1)(b)(c) — HIGH |
 | 3 | 88% of records missing `processing_timestamp` | GDPR Art. 5(1)(e) — HIGH |
-| 4 | Gender DI ratio = 0.77; Gen Z approval rate 25.2 pp below Millennials | EU AI Act Art. 10 — **CRITICAL** |
-| 5 | ZIP code is a structural proxy for gender; credit history proxies for age | EU AI Act Art. 10 — HIGH |
-| 6 | No human oversight mechanism; fully automated rejections in operation | GDPR Art. 22 / EU AI Act Art. 14 — HIGH |
+| 4 | Gender DI = 0.76; Gen Z approval rate ~25 pp below Millennials | EU AI Act Art. 10 — **CRITICAL** |
+| 5 | ZIP code proxies for gender (r = 0.786); credit history proxies for age (r = 0.657) | EU AI Act Art. 10 — HIGH |
+| 6 | No human oversight mechanism; 161 rejections driven by `algorithm_risk_score` alone | GDPR Art. 22 / EU AI Act Art. 14 — HIGH |
 | 7 | All 6 mandatory governance fields absent | GDPR Art. 5(2) / EU AI Act Art. 13 — **CRITICAL** |
-| 8 | Shared SSNs, malformed emails, impossible values in raw pipeline | GDPR Art. 5(1)(d) — MEDIUM |
+| 8 | 98.8% re-identification rate from ZIP + gender + DOB alone | GDPR Art. 5(1)(f) — HIGH |
 
 ---
 
@@ -363,5 +357,3 @@ The current binary auto-reject setup needs to be replaced with a three-tier revi
 4. Exclude ZIP code and credit history from all model features
 5. Add 6 mandatory governance fields with ingestion-level validation
 6. Implement Three-Tier Human Oversight before any further production deployment
-
-
