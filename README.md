@@ -7,19 +7,6 @@ João Serrano (74929)
 Chiara Nathani (71303)
 Guilherme Morgado (56857)
 
-# dego-project-team10
-DEGO Course Project — Team 10
-
->**Team Members**:
-Eve-Fabiene Eichler (71784)
-João Serrano (74929)
-Chiara Nathani (71303)
-Guilherme Morgado (56857)
-
-> **Dataset:** NovaCred synthetic credit application pipeline — 502 raw records  
-
----
-
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
@@ -231,7 +218,7 @@ We also tested whether being young and female compounds the disadvantage beyond 
 
 - **Gender bias confirmed:** DI = 0.76, statistically significant (p = 0.000349), persists after controlling for all financial variables.
 - **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is ~25 pp below every other cohort; Chi-Square p = 0.0015.
-- **Proxy discrimination identified:** ZIP code proxies for gender (r = 0.786); credit history proxies for age (r = 0.657) — both must be excluded from any model feature set.
+- **Proxy discrimination identified:** ZIP code proxies for gender (r = 0.783); credit history proxies for age (r = 0.659) — both must be excluded from any model feature set.
 - **No intersectional compounding** detected between age and gender effects.
 
 ---
@@ -296,9 +283,9 @@ Credit scoring is explicitly listed as High-Risk AI under EU AI Act **Annex III,
 
 | Article | Obligation | Status |
 | :--- | :--- | :--- |
-| Art. 10 | Training data examined and corrected for bias | **NON-COMPLIANT** — Gender DI = 0.76; Gen Z gap ≈ 25 pp |
+| Art. 10 | Training data examined and corrected for bias | **NON-COMPLIANT** — Gender DI = 0.77; Gen Z gap ≈ 25 pp |
 | Art. 13 | Automated decisions traceable to a specific model version | **NON-COMPLIANT** — No `model_version` field anywhere |
-| Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; 161 rejections driven by `algorithm_risk_score` alone |
+| Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; 163 rejections driven by `algorithm_risk_score` alone |
 
 #### Mandatory Governance Fields Audit
 
@@ -339,9 +326,9 @@ Replace the current binary auto-reject setup with a three-tier architecture:
 | 1 | All 4 direct identifiers in plaintext in analytical CSV | GDPR Art. 5(1)(f) — **CRITICAL** |
 | 2 | Sensitive lifestyle spending data collected without documented lawful basis | GDPR Art. 5(1)(b)(c) — HIGH |
 | 3 | 88% of records missing `processing_timestamp` | GDPR Art. 5(1)(e) — HIGH |
-| 4 | Gender DI = 0.76; Gen Z approval rate ~25 pp below Millennials | EU AI Act Art. 10 — **CRITICAL** |
+| 4 | Gender DI = 0.74; Gen Z approval rate ~25 pp below Millennials | EU AI Act Art. 10 — **CRITICAL** |
 | 5 | ZIP code proxies for gender (r = 0.786); credit history proxies for age (r = 0.657) | EU AI Act Art. 10 — HIGH |
-| 6 | No human oversight mechanism; 161 rejections driven by `algorithm_risk_score` alone | GDPR Art. 22 / EU AI Act Art. 14 — HIGH |
+| 6 | No human oversight mechanism; 163 rejections driven by `algorithm_risk_score` alone | GDPR Art. 22 / EU AI Act Art. 14 — HIGH |
 | 7 | All 6 mandatory governance fields absent | GDPR Art. 5(2) / EU AI Act Art. 13 — **CRITICAL** |
 | 8 | 98.8% re-identification rate from ZIP + gender + DOB alone | GDPR Art. 5(1)(f) — HIGH |
 
