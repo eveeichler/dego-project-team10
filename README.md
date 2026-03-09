@@ -275,7 +275,7 @@ Average k improved significantly after generalisation, but 18 of 31 cohorts stil
 | Plaintext SSN, name, email, IP in analytical CSV | Art. 5(1)(f) — Integrity & Confidentiality / Art. 5(1)(c) — Data Minimisation | CRITICAL |
 | 440/502 records (88%) missing `processing_timestamp` | Art. 5(1)(e) — Storage Limitation | HIGH |
 | Gambling & Adult Entertainment spending collected without documented lawful basis | Art. 6, Art. 5(1)(b) — Purpose Limitation | HIGH |
-| 157 inconsistent date formats; shared SSNs; impossible values | Art. 5(1)(d) — Accuracy | MEDIUM |
+| 157 inconsistent date formats; shared SSNs; malformed emails; impossible values (e.g., credit history before age 18) | Art. 5(1)(d) — Accuracy | MEDIUM |
 
 #### EU AI Act Classification
 
