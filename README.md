@@ -262,11 +262,11 @@ The salt is generated using `os.urandom(16)` and stored separately — this brea
 
 | Metric | Value |
 | :--- | :--- |
-| Total k-groups | 31 |
+| Total k-groups | 21 |
 | Minimum k | 1 |
-| Maximum k | 75 |
-| Average k | 15.6 |
-| Groups below k = 5 (at-risk) | 18 of 31 |
+| Maximum k | 118 |
+| Average k | 23.3 |
+| Groups below k = 5 (at-risk) | 9 of 21 |
 
 Average k improved significantly after generalisation, but 18 of 31 cohorts still fall below k ≥ 5 — particularly in lower-density ZIP prefixes. Those groups would need **Differential Privacy** (Laplace mechanism) before the data could safely be shared externally.
 
