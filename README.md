@@ -246,7 +246,7 @@ Under GDPR Art. 4(1), personal data is anything that can be used to identify a r
 | `applicant_info.zip_code` | Quasi-Identifier + Proxy | MEDIUM |
 | `applicant_info.gender` | Quasi-Identifier + Protected | MEDIUM |
 
-A re-identification test was conducted following the Sweeney (2000) methodology, combining ZIP code, gender, and date of birth as quasi-identifiers. **479 of 485 records (98.8%) are uniquely identifiable** using only those three fields, without recourse to SSN or full name. This rate exceeds Sweeney's 87% benchmark for the general US population and establishes that the dataset does not meet anonymisation standards — full GDPR obligations apply.
+A re-identification test was conducted following the Sweeney (2000) methodology, combining ZIP code, gender, and date of birth as quasi-identifiers. **485 of 485 records (100%) are uniquely identifiable** using only those three fields, without recourse to SSN or full name. This rate exceeds Sweeney's 87% benchmark for the general US population and establishes that the dataset does not meet anonymisation standards — full GDPR obligations apply.
 
 ### Part 2 — Pseudonymisation Demonstration
 
