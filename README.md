@@ -165,17 +165,17 @@ Given that the primary objective is a bias audit, data preservation was treated 
 ### Gender Disparate Impact
 
 **Approval rates:**
-- Male: **66.8%** (out of 241 applicants, 161 approved)
-- Female: **50.8%** (out of 244 applicants, 124 approved)
+- Male: **66.3%** (out of 243 applicants, 161 approved)
+- Female: **51.2%** (out of 246 applicants, 126 approved)
 - Gap: **16.0 percentage points**
 
 The key metric here is the **Disparate Impact ratio**, which compares the approval rate of the disadvantaged group against the privileged one:
 
-> DI = Female approval rate / Male approval rate = 0.508 / 0.668 = **0.76**
+> DI = Female approval rate / Male approval rate =  **0.77**
 
-Under the EEOC four-fifths rule, a DI below 0.80 constitutes evidence of adverse impact. At 0.76, NovaCred's system fails this threshold by a meaningful margin.
+Under the EEOC four-fifths rule, a DI below 0.80 constitutes evidence of adverse impact. At 0.77, NovaCred's system fails this threshold by a meaningful margin.
 
-Statistical validation proceeded in two stages. A proportions Z-test (p = 0.000349) confirmed the disparity is not attributable to sampling variation. A logistic regression controlling for annual income, credit history, debt-to-income ratio, and savings balance further confirmed that the gender coefficient remains substantial (coef = 0.697) — the approval gap is not explained by differential financial profiles. Gender independently increases the log-odds of approval.
+Statistical validation proceeded in two stages. A proportions Z-test (p = 0.0007) confirmed the disparity is not attributable to sampling variation. A logistic regression controlling for annual income, credit history, debt-to-income ratio, and savings balance further confirmed that the gender coefficient remains substantial (coef = 0.6235) — the approval gap is not explained by differential financial profiles. Gender independently increases the log-odds of approval.
 
 ### Age-Based Disparity
 
@@ -186,7 +186,7 @@ Statistical validation proceeded in two stages. A proportions Z-test (p = 0.0003
 | Gen X (41–60) | 114 | 62 | **64.8%** |
 | Seniors (60+) | 20 | 9 | **69.0%** |
 
-The ~25 percentage point gap between Gen Z and all other cohorts represents the most pronounced disparity in the dataset. A Chi-Square test confirmed that age group and approval outcome are statistically dependent (p = 0.0015). Logistic regression on continuous age yields a coefficient of 0.025 (OR = 1.026 per year), compounding to approximately **2.1× higher approval odds over a 30-year span** (OR = 2.13).
+The ~25 percentage point gap between Gen Z and all other cohorts represents the most pronounced disparity in the dataset. A Chi-Square test confirmed that age group and approval outcome are statistically dependent (p = 0.0019). Logistic regression on continuous age yields a coefficient of 0.025 (OR = 1.025 per year), compounding to approximately **2.1× higher approval odds over a 30-year span** (OR = 2.089).
 
 ### Proxy Variables
 
@@ -196,19 +196,19 @@ Eliminating protected attributes from a model's feature set does not eliminate b
 
 | Variable | Correlation with Gender |
 | :--- | :--- |
-| ZIP code (binary: NYC prefix 100 vs. other) | **r = 0.786** |
-| Debt-to-income ratio | r = 0.023 |
+| ZIP code (binary: NYC prefix 100 vs. other) | **r = 0.783** |
+| Debt-to-income ratio | r = 0.021 |
 | Annual income | r = −0.050 |
 
-ZIP code functions as a near-perfect proxy for gender in this dataset (r = 0.786). When gender is excluded from the logistic regression, ZIP code absorbs the signal and becomes the dominant predictor — demonstrating that feature removal alone is an insufficient remediation strategy.
+ZIP code functions as a near-perfect proxy for gender in this dataset (r = 0.783). When gender is excluded from the logistic regression, ZIP code absorbs the signal and becomes the dominant predictor — demonstrating that feature removal alone is an insufficient remediation strategy.
 
 **Proxy for Age:**
 
 | Variable | Correlation with Age |
 | :--- | :--- |
-| Credit history months | **r = 0.657** |
-| Annual income | r = 0.389 |
-| Savings balance | r = 0.276 |
+| Credit history months | **r = 0.659** |
+| Annual income | r = 0.386 |
+| Savings balance | r = 0.272 |
 
 Credit history length is structurally correlated with age as a function of elapsed time rather than financial behaviour. A younger applicant with 12 months of credit history is not inherently less creditworthy than an older applicant with 15 years — the difference reflects opportunity, not risk profile.
 
@@ -218,8 +218,8 @@ We also tested whether being young and female compounds the disadvantage beyond 
 
 ### Main Conclusions
 
-- **Gender bias confirmed:** DI = 0.76, statistically significant (p = 0.000349), persists after controlling for all financial variables.
-- **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is ~25 pp below every other cohort; Chi-Square p = 0.0015.
+- **Gender bias confirmed:** DI = 0.77, statistically significant (p = 0.0007), persists after controlling for all financial variables.
+- **Age-based disparity confirmed:** Gen Z approval rate (32.5%) is ~25 pp below every other cohort; Chi-Square p = 0.0019.
 - **Proxy discrimination identified:** ZIP code proxies for gender (r = 0.783); credit history proxies for age (r = 0.659) — both must be excluded from any model feature set.
 - **No intersectional compounding** detected between age and gender effects.
 
