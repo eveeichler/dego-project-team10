@@ -287,6 +287,8 @@ Credit scoring is explicitly listed as High-Risk AI under EU AI Act **Annex III,
 | Art. 13 | Automated decisions traceable to a specific model version | **NON-COMPLIANT** — No `model_version` field anywhere |
 | Art. 14 | Human oversight and override mechanism | **NON-COMPLIANT** — No `human_review_flag`; 163 rejections driven by `algorithm_risk_score` alone |
 
+Arts. 9, 15, and 43 also apply to High-Risk systems but require access to system documentation and pre-deployment records; they cannot be assessed from the dataset alone.
+
 #### Mandatory Governance Fields Audit
 
 GDPR Art. 5(2) — the Accountability Principle — means it's not enough to be compliant, you have to be able to prove it. All six fields that would allow NovaCred to do that are absent:
@@ -341,10 +343,12 @@ Replace the current binary auto-reject setup with a three-tier architecture:
 | GDPR | Art. 83(5) — violations of Arts. 5, 25 | €20M or 4% of global annual turnover |
 | EU AI Act | Art. 99(4) — High-Risk system non-compliance | €15M or 3% of global annual turnover |
 
-**Immediate actions required (in priority order):**
-1. Remove plaintext CSV from Git repository history
-2. Implement pseudonymisation at pipeline ingestion
-3. Drop `spending_Adult Entertainment`, `spending_Gambling`, `spending_Alcohol` fields
-4. Exclude ZIP code and credit history from all model features
-5. Add 6 mandatory governance fields with ingestion-level validation
-6. Implement Three-Tier Human Oversight before any further production deployment
+**Immediate Actions Required**
+
+1. Pseudonymise PII at ingestion
+2. Document lawful basis for data processing
+3. Remove ZIP code from model features
+4. Remove credit history months (age proxy)
+5. Add mandatory governance metadata fields
+6. Introduce human review for automated rejections
+7. Stop collecting lifestyle spending categories without lawful basis
