@@ -64,7 +64,7 @@ dego-project-team10/
 | :--- | :--- |
 | **Data Engineer**: Guilherme Morgado | JSON parsing, nested data flattening, issue detection, cleaning pipeline |
 | **Data Scientist**: João Serrano | Disparate Impact analysis, statistical testing, logistic regression, proxy screening |
-| **Governance Officer**: Eve Eichler | PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
+| **Governance Officer**: Eve-Fabiene Eichler | PII classification, pseudonymisation demo, GDPR/AI Act mapping, controls |
 | **Product Lead**: Chiara Nathani | Presentation, cross-notebook synthesis, repository coordination |
 
 ---
