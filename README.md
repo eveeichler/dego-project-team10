@@ -7,6 +7,8 @@ João Serrano (74929)
 Chiara Nathani (71303)
 Guilherme Morgado (56857)
 
+**The Video Presentation** can be found here: https://youtu.be/OVmXuvylUG4
+
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
